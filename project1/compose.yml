@@ -1,0 +1,53 @@
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: postgres-compose
+    environment:
+      POSTGRES_DB: project1
+      POSTGRES_USER: project1
+      POSTGRES_PASSWORD: project1pass
+    volumes:
+      - project1-postgres-data:/var/lib/postgresql/data
+    networks:
+      - project1-network
+  
+        
+  backend:
+    build: ./backend
+    container_name: backend-compose
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: project1
+      DB_USER: project1
+      DB_PASSWORD: project1pass
+    networks:
+      - project1-network
+
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: nginx-compose
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - project1-network 
+
+volumes:
+  project1-postgres-data:
+
+networks:
+  project1-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24
+          gateway: 172.30.0.1
+
+
+  
+
+      
