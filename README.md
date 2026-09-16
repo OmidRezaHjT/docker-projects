@@ -134,7 +134,7 @@ Docker Swarm
 ## Repository Structure
 
 ```text
-docker-devops-projects/
+docker-projects/
 │
 ├── project-1/
 │   ├── backend/
