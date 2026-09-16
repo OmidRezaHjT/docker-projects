@@ -136,14 +136,14 @@ Docker Swarm
 ```text
 docker-projects/
 │
-├── project-1/
+├── project1/
 │   ├── backend/
 │   ├── nginx/
 │   └── compose.yml
 │
-├── project-2/
+├── project2/
 │
-└── project-3/
+└── project3/
 ```
 
 ## Purpose
