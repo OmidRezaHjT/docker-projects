@@ -1,16 +1,20 @@
-from flask import Flask, Response
-from prometheus_client import Counter, generate_latest
+from flask import Flask, request
+import logging
 
 app = Flask(__name__)
 
-REQUEST_COUNT = Counter(
-    "http_requests_total",
-    "Total number of HTTP requests"
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s"
 )
 
 @app.before_request
-def count_request():
-    REQUEST_COUNT.inc()
+def log_request():
+    logging.info(
+        "%s %s",
+        request.method,
+        request.path
+    )
 
 @app.route("/")
 def home():
@@ -22,6 +26,9 @@ def health():
 
 @app.route("/metrics")
 def metrics():
+    from flask import Response
+    from prometheus_client import generate_latest
+
     return Response(
         generate_latest(),
         mimetype="text/plain"
