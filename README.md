@@ -55,7 +55,25 @@ The goal is to monitor application and infrastructure metrics and gain practical
 
 ---
 
-### Project 3 — DevOps CI/CD Pipeline
+### Project 3 — Centralized Logging with ELK Stack
+
+A centralized logging pipeline for collecting, parsing, and searching logs across multiple containerized services.
+
+Planned technologies:
+
+* Elasticsearch
+* Logstash
+* Kibana
+* Filebeat
+* Docker Compose
+
+The goal is to collect logs from services (e.g. Nginx, Flask, PostgreSQL), parse and structure them, and build searchable dashboards — separate from metrics-based monitoring.
+
+**Status:** ⏳ Planned
+
+---
+
+### Project 4 — DevOps CI/CD Pipeline
 
 A production-style project focused on automating the application lifecycle.
 
@@ -143,7 +161,9 @@ docker-projects/
 │
 ├── project2/
 │
-└── project3/
+├── project3/
+│
+└── project4/
 ```
 
 ## Purpose
