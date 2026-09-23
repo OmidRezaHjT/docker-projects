@@ -51,7 +51,7 @@ Planned technologies:
 
 The goal is to monitor application and infrastructure metrics and gain practical experience with centralized observability.
 
-**Status:** ⏳ Planned
+**Status:** ✅ Completed
 
 ---
 
