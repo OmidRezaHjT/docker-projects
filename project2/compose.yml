@@ -1,0 +1,85 @@
+services:
+
+  backend:
+    build: ./backend
+    container_name: project2-backend
+    ports:
+      - "5000:5000"
+    networks:
+      - project2-network
+    logging:
+      driver: gelf
+      options:
+        gelf-address: "udp://127.0.0.1:12201"
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: project2-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    networks:
+      - project2-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    
+  grafana:
+    image: grafana/grafana
+    container_name: project2-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    networks:
+      - project2-network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.0
+    container_name: project2-elasticsearch
+    ports:
+      - "9200:9200"
+    networks:
+      - project2-network
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
+  
+  
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.15.0
+    container_name: project2-logstash
+    ports:
+      - "12201:12201/udp"
+    volumes:
+      - ./logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
+    networks:
+      - project2-network
+    depends_on:
+      - elasticsearch
+    
+  kibana:
+    image: docker.elastic.com/kibana/kibana:8.15.0
+    container_name: project2_kibana
+    ports:
+      - "5601:5601"  
+    environment:
+       ELASTICSEARCH_HOSTS: "http://project2-elasticsearch:9200"
+    networks:
+      - project2-network
+    depends_on:
+      - elasticsearch
+
+
+networks:
+  project2-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/24
+          gateway: 172.21.0.1
+
+
+    
+
