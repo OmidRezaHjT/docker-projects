@@ -1,0 +1,15 @@
+filebeat.input:
+  - type: filestream
+    id: nginx-access-log
+    enabled: true
+    path:
+      - /var/log/nginx/custom_access.log
+
+
+
+
+  - type: filestream
+    id: flask-app-log
+    enabled: false
+    path:
+      - /var/log/flask/app.log
