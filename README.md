@@ -69,7 +69,7 @@ Planned technologies:
 
 The goal is to collect logs from services (e.g. Nginx, Flask, PostgreSQL), parse and structure them, and build searchable dashboards — separate from metrics-based monitoring.
 
-**Status:** ⏳ Planned
+**Status:** ✅ Completed
 
 ---
 
