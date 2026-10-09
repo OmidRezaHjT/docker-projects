@@ -1,15 +1,31 @@
-filebeat.input:
+filebeat.inputs:
   - type: filestream
     id: nginx-access-log
     enabled: true
-    path:
+    paths:
       - /var/log/nginx/custom_access.log
-
-
+    fields:
+      service: nginx
+    fields_under_root: true
 
 
   - type: filestream
     id: flask-app-log
-    enabled: false
-    path:
+    enabled: true
+    paths:
       - /var/log/flask/app.log
+    fields:
+      service: flask
+    fields_under_root: true
+
+  - type: filestream
+    id: postgres-log
+    enabled: true
+    paths:
+      - /var/log/postgresql/postgres.log
+    fields:
+      service: postgres
+    fields_under_root: true
+
+output.logstash:
+  hosts: ["logstash:5044"]
