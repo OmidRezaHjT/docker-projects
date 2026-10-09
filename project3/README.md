@@ -129,12 +129,7 @@ Debugging order that worked every time: check the source file, then Filebeat log
 - `log_statement=all` makes PostgreSQL log every query; useful for demos, too verbose for production.
 - Filebeat runs as root to read files owned by other containers' users.
 
-## Dashboard
+## AI Assistance
 
-_Add a screenshot here (for example `docs/dashboard.png`)._
+This project was built with the help of an AI assistant (Claude). I used it to explain the tools, plan the roadmap, and draft configuration files step by step. I ran, tested and debugged everything myself, and the troubleshooting section above lists real problems I hit along the way.
 
-Panels: requests by HTTP status code (Nginx), requests by path (Flask), log count by level (PostgreSQL), and a log volume timeline per service.
-
-## Next
-
-Project 4 — CI/CD pipeline with GitHub Actions, a registry and Docker Swarm.
