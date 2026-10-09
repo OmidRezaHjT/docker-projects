@@ -1,0 +1,118 @@
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - elk_network
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.13.4
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOST=https://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk_network
+  
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.13.4
+    container_name: logstash
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+      - nginx_logs:/var/log/nginx:ro
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk_network
+    stdin_open: true
+    tty: true
+  
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports: 
+      - "8080:80"
+    volumes:
+      - nginx_logs:/var/log/nginx
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks: 
+      - elk_network
+   
+  flask-app:
+    build: ./flask-app
+    container_name: flask-app
+    ports:
+      - "5001:5000"
+    volumes:
+      - flask_logs:/var/log/flask
+    networks:
+      - elk_network
+  
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=appuser
+      - POSTGRES_PASSWORD=apppass
+      - POSTGRES_DB=appdb
+    command:
+      - postgres
+      - -c
+      - logging_collector=on
+      - -c
+      - log_directory=/var/log/postgresql
+      - -c
+      - log_filename=postgres.log
+      - -c
+      - log_statement=all
+      - -c
+      - log_connections=on
+      - -c
+      - log_disconnections=on
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_logs:/var/log/postgresql
+    networks:
+      - elk_network
+        
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.13.4
+    container_name: filebeat
+    user: root
+    volumes:
+      - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - nginx_logs:/var/log/nginx:ro
+      - flask_logs:/var/log/flask:ro
+      - filebeat_data:/usr/share/filebeat/data
+      - postgres_logs:/var/log/postgresql:ro
+    depends_on:
+      - logstash
+      - nginx
+      - flask-app
+      - postgres
+    networks:
+      - elk_network
+        
+
+
+volumes:
+  es_data:
+  nginx_logs:
+  flask_logs:
+  postgres_logs:
+  postgres_data:
+  filebeat_data:
+
+networks:
+  elk_network:
+    driver: bridge
