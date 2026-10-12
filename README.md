@@ -160,8 +160,19 @@ docker-projects/
 │   └── compose.yml
 │
 ├── project2/
+│   ├── backend/
+│   ├── grafana/
+│   ├── logstash/
+│   ├── prometheus/
+│   └── compose.yml
 │
 ├── project3/
+│   ├── filebeat/
+│   ├── flask-app/
+│   ├── logstash/
+│   ├── nginx/
+│   ├── README.md
+│   └── compose.yml
 │
 └── project4/
 ```
