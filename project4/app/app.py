@@ -1,4 +1,5 @@
 import os
+import socket
 from flask import Flask, jsonify
 
 app = Flask(__name__)
@@ -7,7 +8,8 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     return jsonify(message="Hello from the CI/CD pipeline",
-                   version=os.getenv("APP_VERSION", "dev"))
+                   version=os.getenv("APP_VERSION", "dev"),
+                   hostname=socket.gethostname())
 
 
 @app.route("/health")
