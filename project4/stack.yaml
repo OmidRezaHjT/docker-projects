@@ -1,0 +1,24 @@
+services:
+  web:
+    image: localhost:5050/cicd-app:1.1
+    ports:
+      - "5002:5000"
+    environment:
+      APP_VERSION: "1.1"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+        failure_action: rollback
+        monitor: 30s
+      restart_policy:
+        condition: on-failure
+  
