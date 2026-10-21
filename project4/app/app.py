@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return jsonify(message="Hello from the CI/CD pipeline",
+    return jsonify(message="Hello! from the CI/CD pipeline",
                    version=os.getenv("APP_VERSION", "dev"),
                    hostname=socket.gethostname())
 
