@@ -118,7 +118,7 @@ Notes:
 * Deployment is a manual `docker stack deploy`; a self-hosted runner was intentionally not used on a personal machine
 * Monitoring and logging are covered in Projects 2 and 3
 
-Status: ✅ Completed
+**Status:** ✅ Completed
 ---
 
 ## Learning Goals
@@ -183,6 +183,10 @@ docker-projects/
 │   └── compose.yml
 │
 └── project4/
+│   ├── app/
+│   ├── README.md
+│   ├── stack.yaml
+
 ```
 
 ## Purpose
