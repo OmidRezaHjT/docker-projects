@@ -184,6 +184,12 @@ docker-projects/
 │
 └── project4/
 │   ├── app/
+│       ├── app.py
+│       ├── test_app.py
+│       ├── requirements.txt
+│       ├── requirements-dev.txt
+│       ├── Dockerfile
+│       └── .dockerignore
 │   ├── README.md
 │   ├── stack.yaml
 
