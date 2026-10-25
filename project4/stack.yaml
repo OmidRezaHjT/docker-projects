@@ -1,10 +1,10 @@
 services:
   web:
-    image: localhost:5050/cicd-app:1.1
+    image: ghcr.io/omidrezahjt/cicd-app:${IMAGE_TAG:?set IMAGE_TAG}
+    environment:
+      APP_VERSION: "${IMAGE_TAG}"
     ports:
       - "5002:5000"
-    environment:
-      APP_VERSION: "1.1"
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
       interval: 5s
