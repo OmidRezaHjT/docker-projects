@@ -73,44 +73,52 @@ The goal is to collect logs from services (e.g. Nginx, Flask, PostgreSQL), parse
 
 ---
 
-### Project 4 — DevOps CI/CD Pipeline
+## Project 4 — DevOps CI/CD Pipeline
 
-A production-style project focused on automating the application lifecycle.
+A CI/CD pipeline for a small Flask app: automated tests and image builds on every push, a container registry, and a Docker Swarm stack with healthchecks, rolling updates, automatic rollback, Secrets and Configs.
 
-Planned technologies:
+Built with:
 
 * GitHub Actions
-* Docker
-* Docker Registry / Nexus
+* Docker (multi-stage build)
+* GitHub Container Registry (GHCR) and a local `registry:2`
 * Docker Swarm
 * Secrets & Configs
-* Deployment automation
-* Monitoring & Logging
+* pytest
 
-Expected workflow:
+Workflow:
 
-```text
+```
 Developer
    ↓
 Git Push
    ↓
-GitHub
-   ↓
 GitHub Actions
    ↓
-Build & Test
+Test (pytest)
    ↓
-Docker Image
+Build Docker Image
    ↓
-Registry
+Push to GHCR (tagged with commit SHA)
    ↓
-Deployment
+Deploy to Docker Swarm (docker stack deploy)
    ↓
-Monitoring
+Healthcheck, rolling update, automatic rollback
 ```
 
-**Status:** ⏳ Planned
+Highlights:
 
+* Image build and push only run if the tests pass
+* Zero-downtime rolling updates, verified with a continuous `curl` loop
+* Deliberately broken release (failing `/health`) was rolled back automatically by Swarm
+* Database password stored as a Docker Secret, app settings as a Docker Config (changed without rebuilding the image)
+
+Notes:
+
+* Deployment is a manual `docker stack deploy`; a self-hosted runner was intentionally not used on a personal machine
+* Monitoring and logging are covered in Projects 2 and 3
+
+Status: ✅ Completed
 ---
 
 ## Learning Goals
